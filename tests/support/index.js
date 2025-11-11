@@ -1,6 +1,6 @@
 const { test: base, expect } = require('@playwright/test')
 
-//Importação dos Page Objetcs
+//Importação dos Page Objects
 const { LandingPage } = require('../pages/LandingPage')
 const { LoginPage } = require('../pages/LoginPage')
 const { MoviesPage } = require('../pages/MoviesPage')
@@ -8,13 +8,15 @@ const { Toast } = require('../pages/Components')
 
 const test = base.extend({
     page: async ({ page }, use) => {
-        await use({
-            ...page,
-            landing: new LandingPage(page),
-            login: new LoginPage(page),
-            movies: new MoviesPage(page),
-            toast: new Toast(page)
-        })
+
+        const context = page
+
+        context['landing'] = new LandingPage(page)
+        context['login'] = new LoginPage(page)
+        context['movies'] = new MoviesPage(page)
+        context['toast'] = new Toast(page)
+
+        await use(context)
     }
 })
 
